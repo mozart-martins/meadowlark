@@ -1,29 +1,43 @@
 const express = require('express')
 
+const { engine } = require('express-handlebars')
+
 const app = express()
 
 const port = process.env.PORT || 3000
 
-app.get('/home', (req, res) => {
-    res.type('text/plain')
-    res.send('Home')
+app.engine('handlebars', engine({
+    defaultLayout: 'main',
+}))
+app.set('view engine', 'handlebars')
+
+// Configurando o diretório de arquivos estáticos, que será invisível para o cliente
+app.use(express.static(__dirname + '/public'))
+
+
+
+app.get('/', (req, res) => {
+    // res.type('text/plain')
+    // O status padrão é o 200
+    res.render('home')
 })
 
 app.get('/about', (req, res) => {
-    res.type('text/plain')
-    res.send('About')
+    // res.type('text/plain')
+    // O status padrão é o 200
+    res.render('about')
 })
 
 app.use((req, res) => {
     res.type('text/plain')
     res.status(400)
-    res.send("Página não encontrada")
+    res.render("Página não encontrada")
 })
 
 app.use((error, req, res, next) => {
     res.type('text/plain')
     res.status(500)
-    res.send("Erro no servidor")
+    res.render("Erro no servidor")
 })
 
 
