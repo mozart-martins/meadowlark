@@ -1,5 +1,7 @@
 const express = require('express')
 
+const fortune = require('./src/lib/fortune')
+
 const { engine } = require('express-handlebars')
 
 const app = express()
@@ -25,7 +27,9 @@ app.get('/', (req, res) => {
 app.get('/about', (req, res) => {
     // res.type('text/plain')
     // O status padrão é o 200
-    res.render('about')
+    res.render('about', {
+        fortune: fortune.getFortune()
+    })
 })
 
 app.use((req, res) => {
